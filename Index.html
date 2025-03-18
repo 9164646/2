@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         body {
@@ -39,20 +40,6 @@
             font-weight: 600;
         }
 
-        .nav-pills .nav-link {
-            color: #007bff;
-            border: 2px solid #007bff;
-            background: #ffffff;
-            margin: 5px;
-            border-radius: 30px;
-            transition: 0.3s;
-        }
-
-        .nav-pills .nav-link.active {
-            background: #007bff;
-            color: #fff;
-        }
-
         .btn-calculate {
             background: #007bff;
             color: white;
@@ -61,9 +48,14 @@
             padding: 10px;
             transition: background 0.3s, transform 0.2s;
             font-weight: 600;
+            width: 100%;
         }
 
-        .btn-calculate:hover {
+        .btn-calculate:disabled {
+            background: #ccc;
+        }
+
+        .btn-calculate:hover:enabled {
             background: #0056b3;
             transform: scale(1.05);
         }
@@ -73,35 +65,15 @@
             border: 2px solid #007bff;
             border-radius: 5px;
             padding: 8px 10px;
+            margin-bottom: 10px;
             outline: none;
             transition: border-color 0.3s;
-            margin-bottom: 10px;
         }
 
         input:focus {
             border-color: #0056b3;
         }
 
-
-        /* Dark Mode */
-.dark-mode {
-    background: #121212;
-    color: #ffffff;
-}
-
-.dark-mode .container {
-    background: #1e1e1e;
-    color: #ffffff;
-    border-color: #007bff;
-}
-.dark-mode .result {
-    background: #2c2c2c;
-    color: #ffffff;
-    border-color: #007bff;
-}
-
-      
-        
         .result {
             background: #e9f2ff;
             padding: 15px;
@@ -114,14 +86,25 @@
             font-weight: 600;
         }
 
-        .footer {
-            background: #007bff;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            border-radius: 10px;
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            margin: 10px auto;
+            width: 30px;
+            height: 30px;
+            border: 4px solid rgba(0, 123, 255, 0.3);
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Chart container */
+        .chart-container {
             margin-top: 20px;
-            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -130,279 +113,96 @@
 
 <div class="container">
     <div class="header">Multiple Calculators</div>
-<button class="btn btn-dark w-100 my-3" onclick="toggleDarkMode()">Dark Mode</button>
-    <ul class="nav nav-pills nav-justified">
-        <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#age">Age</a></li>
-        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#mic">MIC</a></li>
-        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#bmi">BMI</a></li>
-        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#interest">Interest</a></li>
-        <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#emi">EMI</a></li>
-    </ul>
 
-    <div class="tab-content pt-4">
-       <!-- Age Calculator -->
-        <div id="age" class="tab-pane fade show active">
-            <h2>Age Calculator</h2>
-            <form id="ageForm" class="needs-validation" novalidate>
-    <input type="date" id="dob" required>
-    <div class="invalid-feedback">Please enter a valid date of birth.</div>
-    
-    <button class="btn-calculate" type="button" onclick="calculateAge()">Calculate</button>
-    <button class="btn-reset" type="button" onclick="resetForm('ageForm')">Reset</button>
-    
-    <div class="result" id="ageResult" aria-live="polite"></div>
-</form>
-        </div>
-
-        <!-- Monthly Interest Calculator -->
-        <div id="mic" class="tab-pane fade">
-            <h2>Monthly Interest Calculator</h2>
-            <form id="monthlyInterestForm" class="needs-validation" novalidate>
-    <input type="number" id="principalMic" placeholder="Enter Principal Amount" required>
-    <div class="invalid-feedback">Please enter a valid principal amount.</div>
-
-    <input type="number" id="rateMic" placeholder="Enter Monthly Interest Rate" required>
-    <div class="invalid-feedback">Please enter a valid interest rate.</div>
-
-    <input type="date" id="fromDate" required>
-    <div class="invalid-feedback">Please enter a valid start date.</div>
-
-    <input type="date" id="toDate" required>
-    <div class="invalid-feedback">Please enter a valid end date.</div>
-
-    <button class="btn-calculate" type="button" onclick="calculateMonthlyInterest()">Calculate</button>
-    <button class="btn-reset" type="button" onclick="resetForm('monthlyInterestForm')">Reset</button>
-
-    <div class="result" id="micResult"></div>
-</form>
-        </div>
-
-        <!-- BMI Calculator -->
-        <div id="bmi" class="tab-pane fade">
-            <h2>BMI Calculator</h2>
-            <form id="bmiForm" class="needs-validation" novalidate>
-    <input type="number" id="weight" aria-label="Enter Weight in kg" placeholder="Enter Weight (kg)" required>
-    <div class="invalid-feedback">Please enter a valid weight.</div>
-
-    <input type="number" id="height" aria-label="Enter Height in cm" placeholder="Enter Height (cm)" required>
-    <div class="invalid-feedback">Please enter a valid height.</div>
-
-    <button class="btn-calculate" type="button" onclick="calculateBMI()">Calculate</button>
-    <button class="btn-reset" type="button" onclick="resetForm('bmiForm')">Reset</button>
-
-    <div class="result" id="bmiResult"></div>
-</form>
-
-        </div>
-
-    
-        <!-- Interest Calculator -->
-        <div id="interest" class="tab-pane fade">
-            <h2>Interest Calculator</h2>
-            <form id="interestForm" class="needs-validation" novalidate>
-    <input type="number" id="principalInt" placeholder="Enter Principal Amount" required>
-    <div class="invalid-feedback">Please enter a valid principal amount.</div>
-
-    <input type="number" id="rateInt" placeholder="Enter Annual Interest Rate" required>
-    <div class="invalid-feedback">Please enter a valid interest rate.</div>
-
-    <input type="number" id="years" placeholder="Years">
-    <input type="number" id="months" placeholder="Months">
-    <input type="number" id="days" placeholder="Days">
-
-    <button class="btn-calculate" type="button" onclick="calculateInterest()">Calculate</button>
-    <button class="btn-reset" type="button" onclick="resetForm('interestForm')">Reset</button>
-
-    <div class="result" id="interestResult"></div>
-</form>
-
-        </div>
- 
-
-        <!-- EMI Calculator -->
-        <div id="emi" class="tab-pane fade">
-            <h2>EMI Calculator</h2>
-            <form id="emiForm" class="needs-validation" novalidate>
-    <input type="number" id="loanAmount" placeholder="Enter Loan Amount" required>
-    <div class="invalid-feedback">Please enter a valid loan amount.</div>
-
-    <input type="number" id="loanRate" placeholder="Enter Interest Rate" required>
-    <div class="invalid-feedback">Please enter a valid interest rate.</div>
-
-    <input type="number" id="loanTenure" placeholder="Enter Tenure (Months)" required>
-    <div class="invalid-feedback">Please enter a valid tenure.</div>
-
-    <button class="btn-calculate" type="button" onclick="calculateEMI()">Calculate</button>
-    <button class="btn-reset" type="button" onclick="resetForm('emiForm')">Reset</button>
-
-    <div class="result" id="emiResult"></div>
-</form>
-
-        </div>
+    <!-- EMI Calculator -->
+    <div>
+        <h2>EMI Calculator</h2>
+        <form id="emiForm">
+            <input type="number" id="loanAmount" placeholder="Enter Loan Amount" required>
+            <input type="number" id="loanRate" placeholder="Enter Interest Rate (%)" required>
+            <input type="number" id="loanTenure" placeholder="Enter Tenure (Months)" required>
+            
+            <div class="spinner" id="emiSpinner"></div>
+            <button class="btn-calculate" id="emiCalculate" type="button" disabled onclick="calculateEMI()">Calculate</button>
+            
+            <div class="result" id="emiResult"></div>
+            <div class="chart-container">
+                <canvas id="emiChart"></canvas>
+            </div>
+        </form>
     </div>
 </div>
 
-<div class="footer">© 2025 Multiple Calculators | Made with ❤️ by Calculator.in</div>
+<script>
+    // Enable button only when all inputs are valid
+    const inputs = document.querySelectorAll('#emiForm input');
+    const calculateBtn = document.getElementById('emiCalculate');
 
-    <script>
-     // Dark Mode Toggle
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-}
-
-// Reset Form Function
-function resetForm(formId) {
-    const form = document.getElementById(formId);
-    form.reset();
-    clearResults();
-    form.classList.remove('was-validated');
-}
-
-// Clear Results Function
-function clearResults() {
-    const results = document.querySelectorAll('.result');
-    results.forEach(result => result.innerHTML = '');
-}
-
-// Bootstrap Validation Feedback
-(() => {
-    'use strict';
-    const forms = document.querySelectorAll('.needs-validation');
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', (event) => {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+            calculateBtn.disabled = !allFilled;
+        });
     });
-})();
 
-        // Age Calculator with optimized date handling
-    function calculateAge() {
-        let dob = document.getElementById("dob").value;
-        if (!dob) {
-            document.getElementById("ageResult").innerText = "Please enter a valid date.";
+    // EMI Calculation with spinner and chart
+    function calculateEMI() {
+        const loanAmount = parseFloat(document.getElementById("loanAmount").value);
+        const interestRate = parseFloat(document.getElementById("loanRate").value) / 12 / 100;
+        const tenure = parseFloat(document.getElementById("loanTenure").value);
+        const spinner = document.getElementById("emiSpinner");
+
+        if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(tenure) || tenure <= 0) {
+            document.getElementById("emiResult").innerText = "Please enter valid values.";
             return;
         }
 
-        let birthDate = new Date(dob);
-        let today = new Date();
-        let ageInMillis = today.getTime() - birthDate.getTime();
+        // Show spinner
+        spinner.style.display = "block";
+        calculateBtn.disabled = true;
 
-        let ageDate = new Date(ageInMillis);
-        let years = ageDate.getUTCFullYear() - 1970;
-        let months = ageDate.getUTCMonth();
-        let days = ageDate.getUTCDate() - 1;
+        setTimeout(() => {
+            const emi = (loanAmount * interestRate * Math.pow(1 + interestRate, tenure)) / (Math.pow(1 + interestRate, tenure) - 1);
+            const totalAmount = emi * tenure;
+            const totalInterest = totalAmount - loanAmount;
 
-        document.getElementById("ageResult").innerText = `You are ${years} years, ${months} months, and ${days} days old.`;
+            // Display results
+            document.getElementById("emiResult").innerHTML = `
+                Monthly EMI: ₹${emi.toFixed(2)}<br>
+                Principal: ₹${loanAmount.toFixed(2)}<br>
+                Total Interest: ₹${totalInterest.toFixed(2)}<br>
+                Total Amount: ₹${totalAmount.toFixed(2)}
+            `;
+
+            // Hide spinner
+            spinner.style.display = "none";
+            calculateBtn.disabled = false;
+
+            // Update Chart
+            updateChart(loanAmount, totalInterest);
+        }, 1500); // Simulate loading
     }
 
-   
-
-// Monthly Interest Calculator
-function calculateMonthlyInterest() {
-    let principal = parseFloat(document.getElementById("principalMic").value);
-    let rate = parseFloat(document.getElementById("rateMic").value);
-    let fromDate = new Date(document.getElementById("fromDate").value);
-    let toDate = new Date(document.getElementById("toDate").value);
-
-    if (isNaN(principal) || isNaN(rate) || fromDate == "Invalid Date" || toDate == "Invalid Date") {
-        document.getElementById("micResult").innerText = "Please enter valid values.";
-        return;
+    // Chart.js - EMI Pie Chart
+    let emiChart;
+    function updateChart(principal, interest) {
+        const ctx = document.getElementById("emiChart").getContext("2d");
+        if (emiChart) emiChart.destroy();
+        emiChart = new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: ["Principal", "Interest"],
+                datasets: [{
+                    data: [principal, interest],
+                    backgroundColor: ["#007bff", "#ffc107"],
+                    hoverBackgroundColor: ["#0056b3", "#ff9800"]
+                }]
+            },
+            options: { responsive: true }
+        });
     }
-
-    let diffTime = toDate - fromDate;
-    let diffDays = diffTime / (1000 * 3600 * 24);
-    let months = diffDays / 30;
-    let interest = (principal * rate * months) / 100;
-    let totalAmount = principal + interest;
-
-    document.getElementById("micResult").innerHTML = `Principal: ₹${principal.toFixed(2)}<br>Interest: ₹${interest.toFixed(2)}<br>Total Amount: ₹${totalAmount.toFixed(2)}`;
-}
-        
-// BMI Calculator
-function calculateBMI() {
-    let weight = parseFloat(document.getElementById("weight").value);
-    let height = parseFloat(document.getElementById("height").value) / 100;
-
-    if (isNaN(weight) || isNaN(height) || height <= 0) {
-        document.getElementById("bmiResult").innerText = "Please enter valid weight and height.";
-        return;
-    }
-
-    let bmi = weight / (height * height);
-    let category = "";
-
-    if (bmi < 18.5) category = "Underweight";
-else if (bmi < 24.9) category = "Normal weight";
-else if (bmi < 29.9) category = "Overweight";
-else category = "Obese";
-
-
-    document.getElementById("bmiResult").innerText = `BMI: ${bmi.toFixed(2)} (${category})`;
-}
-
-
-
-// Intrest Caluclator
-function calculateInterest() {
-    let principal = parseFloat(document.getElementById("principalInt").value);
-    let rate = parseFloat(document.getElementById("rateInt").value);
-    let years = parseFloat(document.getElementById("years").value) || 0;
-    let months = parseFloat(document.getElementById("months").value) || 0;
-    let days = parseFloat(document.getElementById("days").value) || 0;
-
-    if (isNaN(principal) || isNaN(rate) || (years === 0 && months === 0 && days === 0)) {
-        document.getElementById("interestResult").innerText = "Please enter valid values.";
-        return;
-    }
-
-    // Calculate total time in years (considering months and days)
-    let totalYears = years + (months / 12) + (days / 365);
-
-    // Calculate interest and total amount
-    let interest = (principal * rate * totalYears) / 100;
-    let totalAmount = principal + interest;
-
-    document.getElementById("interestResult").innerHTML = `
-        Principal: ₹${principal.toFixed(2)}<br>
-        Interest: ₹${interest.toFixed(2)}<br>
-        Total Amount: ₹${totalAmount.toFixed(2)}
-    `;
-}
-
-
-// EMI Calculator
-function calculateEMI() {
-    let loanAmount = parseFloat(document.getElementById("loanAmount").value);
-    let interestRate = parseFloat(document.getElementById("loanRate").value) / 12 / 100;
-    let tenure = parseFloat(document.getElementById("loanTenure").value);
-
-    if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(tenure) || tenure <= 0) {
-        document.getElementById("emiResult").innerText = "Please enter valid values.";
-        return;
-    }
-
-    // Calculate EMI
-    let emi = (loanAmount * interestRate * Math.pow(1 + interestRate, tenure)) / (Math.pow(1 + interestRate, tenure) - 1);
-    let totalAmount = emi * tenure;
-    let totalInterest = totalAmount - loanAmount;
-
-    // Display Results
-    document.getElementById("emiResult").innerHTML = `
-        Monthly EMI: ₹${emi.toFixed(2)}<br>
-        Principal: ₹${loanAmount.toFixed(2)}<br>
-        Total Interest: ₹${totalInterest.toFixed(2)}<br>
-        Total Amount: ₹${totalAmount.toFixed(2)}
-    `;
-}
-
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
 </body>
 </html>
