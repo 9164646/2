@@ -11,58 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-
-        .dark-mode {
-    background: #121212;
-    color: #ffffff;
-}
-
-.dark-mode .container {
-    background: #1e1e1e;
-    border-color: #90caf9;
-    color: #ffffff;
-}
-
-.dark-mode .header,
-.dark-mode .footer {
-    background: #90caf9;
-    color: #121212;
-}
-
-.dark-mode input {
-    background: #333;
-    color: #ffffff;
-    border-color: #90caf9;
-}
-
-.dark-mode input:focus {
-    border-color: #64b5f6;
-}
-
-.dark-mode .btn-calculate {
-    background: #90caf9;
-    color: #121212;
-}
-
-.dark-mode .btn-calculate:hover {
-    background: #64b5f6;
-}
-
-.dark-mode .result {
-    background: #333;
-    color: #90caf9;
-    border-color: #90caf9;
-}
-        .dark-mode-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 1000;
-        }
-
-
         body {
             font-family: 'Poppins', sans-serif;
             background: #f0f4f8;
@@ -91,28 +39,18 @@
             font-weight: 600;
         }
 
-        .nav-pills .nav-link {
-            color: #007bff;
-            border: 2px solid #007bff;
-            background: #ffffff;
-            margin: 5px;
-            border-radius: 30px;
-            transition: 0.3s;
-        }
-
-        .nav-pills .nav-link.active {
-            background: #007bff;
-            color: #fff;
-        }
-
         .btn-calculate {
             background: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
-            padding: 10px;
+            padding: 10px 20px;
             transition: background 0.3s, transform 0.2s;
             font-weight: 600;
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .btn-calculate:hover {
@@ -160,12 +98,6 @@
 
 <body>
 
-    <!-- Dark Mode Toggle Button -->
-<span class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</span>
-    
-
-
-
 <div class="container">
     <div class="header">Multiple Calculators</div>
 
@@ -179,233 +111,170 @@
 
     <div class="tab-content pt-4">
         <!-- Age Calculator -->
-            <div id="age" class="tab-pane fade show active">
-                <h2>Age Calculator</h2>
-                <input type="date" id="dobAge" oninput="toggleButton('ageBtn', 'dobAge')">
-                <button id="ageBtn" class="btn-calculate" onclick="calculateAge()" disabled>Calculate</button>
-                <div class="result" id="ageResult"></div>
-            </div>
+        <div id="age" class="tab-pane fade show active">
+            <h2>Age Calculator</h2>
+            <input type="date" id="dob">
+            <button class="btn-calculate" onclick="calculateAge()">Calculate</button>
+            <div class="result" id="ageResult"></div>
+        </div>
 
         <!-- Monthly Interest Calculator -->
-<div id="mic" class="tab-pane fade">
-    <h2>Monthly Interest Calculator</h2>
-    <input type="number" id="principalMic" placeholder="Enter Principal Amount" oninput="toggleButton('MICBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
-    <input type="number" id="rateMic" placeholder="Enter Monthly Interest Rate" oninput="toggleButton('MICBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
-    <input type="date" id="fromDate" oninput="toggleButton('MICBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
-    <input type="date" id="toDate" oninput="toggleButton('MICBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
-
-    <button id="MICBtn" class="btn-calculate" onclick="calculateMonthlyInterest()" disabled>Calculate</button>
-
-    <div class="result" id="micResult"></div>
-</div>
-
-        
+        <div id="mic" class="tab-pane fade">
+            <h2>Monthly Interest Calculator</h2>
+            <input type="number" id="principalMic" min="0" placeholder="Enter Principal Amount">
+            <input type="number" id="rateMic" min="0" placeholder="Enter Monthly Interest Rate">
+            <input type="date" id="fromDate">
+            <input type="date" id="toDate">
+            <button class="btn-calculate" onclick="calculateMonthlyInterest()">Calculate</button>
+            <div class="result" id="micResult"></div>
+        </div>
 
         <!-- BMI Calculator -->
-            <div id="bmi" class="tab-pane fade">
-                <h2>BMI Calculator</h2>
-                <input type="number" id="weight" placeholder="Enter Weight (kg)" oninput="toggleButton('bmiBtn', 'weight', 'height')">
-                <input type="number" id="height" placeholder="Enter Height (cm)" oninput="toggleButton('bmiBtn', 'weight', 'height')">
-                <button id="bmiBtn" class="btn-calculate" onclick="calculateBMI()" disabled>Calculate</button>
-                <div class="result" id="bmiResult"></div>
-            </div>
+        <div id="bmi" class="tab-pane fade">
+            <h2>BMI Calculator</h2>
+            <input type="number" id="weight" min="0" placeholder="Enter Weight (kg)">
+            <input type="number" id="height" min="0" placeholder="Enter Height (cm)">
+            <button class="btn-calculate" onclick="calculateBMI()">Calculate</button>
+            <div class="result" id="bmiResult"></div>
+        </div>
 
-    
         <!-- Interest Calculator -->
         <div id="interest" class="tab-pane fade">
             <h2>Interest Calculator</h2>
-            <input type="number" id="principalInt" placeholder="Enter Principal Amount">
-            <input type="number" id="rateInt" placeholder="Enter Annual Interest Rate">
-            <input type="number" id="years" placeholder="Years">
-            <input type="number" id="months" placeholder="Months">
-            <input type="number" id="days" placeholder="Days">
-           
-<input type="number" id="rateInt" oninput="toggleButton('interestBtn', 'principalInt', 'rateInt')">
-
-            
-            <button id="IntrestBtn" class="btn-calculate" onclick="calculateInterest()" disabled>Calculate</button>
-
+            <input type="number" id="principalInt" min="0" placeholder="Enter Principal Amount">
+            <input type="number" id="rateInt" min="0" placeholder="Enter Annual Interest Rate">
+            <input type="number" id="years" min="0" placeholder="Years">
+            <input type="number" id="months" min="0" placeholder="Months">
+            <input type="number" id="days" min="0" placeholder="Days">
+            <button class="btn-calculate" onclick="calculateInterest()">Calculate</button>
             <div class="result" id="interestResult"></div>
         </div>
- 
 
         <!-- EMI Calculator -->
         <div id="emi" class="tab-pane fade">
             <h2>EMI Calculator</h2>
-            <input type="number" id="loanAmount" placeholder="Enter Loan Amount">
-            <input type="number" id="loanRate" placeholder="Enter Interest Rate">
-            <input type="number" id="loanTenure" placeholder="Enter Tenure (Months)">
-            
-<input type="number" id="loanRate" oninput="toggleButton('emiBtn', 'loanAmount', 'loanRate', 'loanTenure')">
-<input type="number" id="loanTenure" oninput="toggleButton('emiBtn', 'loanAmount', 'loanRate', 'loanTenure')">
-
-            <button id="EMIBtn" class="btn-calculate" onclick="calculateEMI()" disabled>Calculate</button>
-        <div class="result" id="emiResult"></div>
+            <input type="number" id="loanAmount" min="0" placeholder="Enter Loan Amount">
+            <input type="number" id="loanRate" min="0" placeholder="Enter Interest Rate">
+            <input type="number" id="loanTenure" min="0" placeholder="Enter Tenure (Months)">
+            <button class="btn-calculate" onclick="calculateEMI()">Calculate</button>
+            <div class="result" id="emiResult"></div>
         </div>
     </div>
 </div>
 
 <div class="footer">© 2025 Multiple Calculators | Made with ❤️ by Calculator.in</div>
 
-    <script>
-
-        function toggleButton(buttonId, ...inputIds) {
-    const isValid = inputIds.every(id => document.getElementById(id).value.trim() !== "");
-    document.getElementById(buttonId).disabled = !isValid;
-}
-
-        function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-}
-
-// Apply dark mode on page load if it was enabled before
-window.onload = function () {
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-};
-
-  // Auto-focus first input on tab switch
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('shown.bs.tab', () => {
-                const activeTab = document.querySelector('.tab-pane.active input');
-                if (activeTab) activeTab.focus();
-            });
+<script>
+    // Clear results when switching tabs
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('shown.bs.tab', () => {
+            document.querySelectorAll('.result').forEach(result => result.innerHTML = '');
         });
-// Age Calculator (Moved outside the event listener)
-function calculateAge() {
-    let dob = document.getElementById("dob").value;
-    if (!dob) {
-        document.getElementById("ageResult").innerText = "Please enter a valid date.";
-        return;
+    });
+
+    // Age Calculator
+    function calculateAge() {
+        const dob = document.getElementById("dob").value;
+        if (!dob) {
+            document.getElementById("ageResult").innerText = "Please enter a valid date.";
+            return;
+        }
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
+        let days = today.getDate() - birthDate.getDate();
+
+        if (months < 0 || (months === 0 && days < 0)) {
+            years--;
+            months += (months < 0) ? 12 : 0;
+        }
+
+        if (days < 0) {
+            const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+            days += prevMonth;
+            months--;
+        }
+
+        document.getElementById("ageResult").innerText = `You are ${years} years, ${months} months, and ${days} days old.`;
     }
 
-    let birthDate = new Date(dob);
-    let today = new Date();
+    // Monthly Interest Calculator
+    function calculateMonthlyInterest() {
+        const principal = parseFloat(document.getElementById("principalMic").value);
+        const rate = parseFloat(document.getElementById("rateMic").value);
+        const fromDate = new Date(document.getElementById("fromDate").value);
+        const toDate = new Date(document.getElementById("toDate").value);
 
-    // Calculate the difference in years, months, and days
-    let years = today.getFullYear() - birthDate.getFullYear();
-    let months = today.getMonth() - birthDate.getMonth();
-    let days = today.getDate() - birthDate.getDate();
+        if (isNaN(principal) || isNaN(rate) || isNaN(fromDate) || isNaN(toDate) || fromDate >= toDate) {
+            document.getElementById("micResult").innerText = "Please enter valid inputs.";
+            return;
+        }
 
-    // Adjust if the current month is before the birth month
-    if (months < 0 || (months === 0 && days < 0)) {
-        years--;
-        months += (months < 0) ? 12 : 0;
+        const diffInTime = toDate.getTime() - fromDate.getTime();
+        const days = Math.floor(diffInTime / (1000 * 3600 * 24));
+        const months = days / 30.44; // Approx. months
+        const interest = (principal * rate * months) / 100;
+        document.getElementById("micResult").innerText = `Total Interest: $${interest.toFixed(2)}`;
     }
 
-    // Adjust days if today's date is before birth date
-    if (days < 0) {
-        let lastMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-        days += lastMonth;
-        months--;
+    // BMI Calculator
+    function calculateBMI() {
+        const weight = parseFloat(document.getElementById("weight").value);
+        const height = parseFloat(document.getElementById("height").value) / 100;
+
+        if (isNaN(weight) || isNaN(height) || height <= 0) {
+            document.getElementById("bmiResult").innerText = "Please enter valid inputs.";
+            return;
+        }
+
+        const bmi = weight / (height * height);
+        let category = "";
+
+        if (bmi < 18.5) category = "Underweight";
+        else if (bmi < 24.9) category = "Normal weight";
+        else if (bmi < 29.9) category = "Overweight";
+        else category = "Obese";
+
+        document.getElementById("bmiResult").innerText = `BMI: ${bmi.toFixed(2)} (${category})`;
     }
 
-    document.getElementById("ageResult").innerText = `You are ${years} years, ${months} months, and ${days} days old.`;
-}
+    // Interest Calculator
+    function calculateInterest() {
+        const principal = parseFloat(document.getElementById("principalInt").value);
+        const rate = parseFloat(document.getElementById("rateInt").value);
+        const years = parseInt(document.getElementById("years").value) || 0;
+        const months = parseInt(document.getElementById("months").value) || 0;
+        const days = parseInt(document.getElementById("days").value) || 0;
 
+        if (isNaN(principal) || isNaN(rate) || (years <= 0 && months <= 0 && days <= 0)) {
+            document.getElementById("interestResult").innerText = "Please enter valid inputs.";
+            return;
+        }
 
-
-// Monthly InterestCalculator
-function calculateMonthlyInterest() {
-    let principal = parseFloat(document.getElementById("principalMic").value);
-    let rate = parseFloat(document.getElementById("rateMic").value);
-    let fromDate = new Date(document.getElementById("fromDate").value);
-    let toDate = new Date(document.getElementById("toDate").value);
-
-    if (isNaN(principal) || isNaN(rate) || fromDate == "Invalid Date" || toDate == "Invalid Date") {
-        document.getElementById("micResult").innerText = "Please enter valid values.";
-        return;
+        const totalDays = (years * 365) + (months * 30) + days;
+        const interest = (principal * rate * totalDays) / (100 * 365);
+        document.getElementById("interestResult").innerText = `Total Interest: $${interest.toFixed(2)}`;
     }
 
-    let diffTime = toDate - fromDate;
-    let diffDays = diffTime / (1000 * 3600 * 24);
-    let months = diffDays / 30;
-    let interest = (principal * rate * months) / 100;
-    let totalAmount = principal + interest;
+    // EMI Calculator
+    function calculateEMI() {
+        const loanAmount = parseFloat(document.getElementById("loanAmount").value);
+        const rate = parseFloat(document.getElementById("loanRate").value) / 12 / 100;
+        const tenure = parseInt(document.getElementById("loanTenure").value);
 
-    document.getElementById("micResult").innerHTML = `Principal: ₹${principal.toFixed(2)}<br>Interest: ₹${interest.toFixed(2)}<br>Total Amount: ₹${totalAmount.toFixed(2)}`;
-}
-// BMI Calculator
-function calculateBMI() {
-    let weight = parseFloat(document.getElementById("weight").value);
-    let height = parseFloat(document.getElementById("height").value) / 100;
+        if (isNaN(loanAmount) || isNaN(rate) || isNaN(tenure) || tenure <= 0) {
+            document.getElementById("emiResult").innerText = "Please enter valid inputs.";
+            return;
+        }
 
-    if (isNaN(weight) || isNaN(height) || height <= 0) {
-        document.getElementById("bmiResult").innerText = "Please enter valid weight and height.";
-        return;
+        const emi = (loanAmount * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
+        document.getElementById("emiResult").innerText = `Monthly EMI: $${emi.toFixed(2)}`;
     }
-
-    let bmi = weight / (height * height);
-    let category = "";
-
-    if (bmi < 18.5) category = "Underweight";
-    else if (bmi < 24.9) category = "Normal weight";
-    else if (bmi < 29.9) category = "Overweight";
-    else category = "Obese";
-
-    document.getElementById("bmiResult").innerText = `BMI: ${bmi.toFixed(2)} (${category})`;
-}
-
-
-
-// Intrest Caluclator
-function calculateInterest() {
-    let principal = parseFloat(document.getElementById("principalInt").value);
-    let rate = parseFloat(document.getElementById("rateInt").value);
-    let years = parseFloat(document.getElementById("years").value) || 0;
-    let months = parseFloat(document.getElementById("months").value) || 0;
-    let days = parseFloat(document.getElementById("days").value) || 0;
-
-    if (isNaN(principal) || isNaN(rate) || (years === 0 && months === 0 && days === 0)) {
-        document.getElementById("interestResult").innerText = "Please enter valid values.";
-        return;
-    }
-
-    // Calculate total time in years (considering months and days)
-    let totalYears = years + (months / 12) + (days / 365);
-
-    // Calculate interest and total amount
-    let interest = (principal * rate * totalYears) / 100;
-    let totalAmount = principal + interest;
-
-    document.getElementById("interestResult").innerHTML = `
-        Principal: ₹${principal.toFixed(2)}<br>
-        Interest: ₹${interest.toFixed(2)}<br>
-        Total Amount: ₹${totalAmount.toFixed(2)}
-    `;
-}
-
-// EMI Calculator
-function calculateEMI() {
-    let loanAmount = parseFloat(document.getElementById("loanAmount").value);
-    let interestRate = parseFloat(document.getElementById("loanRate").value) / 12 / 100;
-    let tenure = parseFloat(document.getElementById("loanTenure").value);
-
-    if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(tenure) || tenure <= 0) {
-        document.getElementById("emiResult").innerText = "Please enter valid values.";
-        return;
-    }
-
-    // Calculate EMI
-    let emi = (loanAmount * interestRate * Math.pow(1 + interestRate, tenure)) / (Math.pow(1 + interestRate, tenure) - 1);
-    let totalAmount = emi * tenure;
-    let totalInterest = totalAmount - loanAmount;
-
-    // Display Results
-    document.getElementById("emiResult").innerHTML = `
-        Monthly EMI: ₹${emi.toFixed(2)}<br>
-        Principal: ₹${loanAmount.toFixed(2)}<br>
-        Total Interest: ₹${totalInterest.toFixed(2)}<br>
-        Total Amount: ₹${totalAmount.toFixed(2)}
-    `;
-}
-
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
