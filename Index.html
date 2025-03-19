@@ -192,21 +192,19 @@
         </div>
 
         <!-- Monthly Interest Calculator -->
-        <div id="mic" class="tab-pane fade">
-            <h2>Monthly Interest Calculator</h2>
-            <input type="number" id="principalMic" placeholder="Enter Principal Amount">
-            <input type="number" id="rateMic" placeholder="Enter Monthly Interest Rate">
-            <input type="date" id="fromDate">
-            <input type="date" id="toDate">
-            <input type="number" id="principalMic" placeholder="Enter Principal Amount" oninput="toggleButton('micBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
-<input type="number" id="rateMic" placeholder="Enter Monthly Interest Rate" oninput="toggleButton('micBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
-<input type="date" id="fromDate" oninput="toggleButton('micBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
-<input type="date" id="toDate" oninput="toggleButton('micBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
-            <button class="btn-calculate" onclick="calculateMonthlyInterest()">Calculate</button>
-            <button id="MICBtn" class="btn-calculate" onclick="calculateMonthlyIntrest()" disabled>Calculate</button>
+<div id="mic" class="tab-pane fade">
+    <h2>Monthly Interest Calculator</h2>
+    <input type="number" id="principalMic" placeholder="Enter Principal Amount" oninput="toggleButton('MICBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
+    <input type="number" id="rateMic" placeholder="Enter Monthly Interest Rate" oninput="toggleButton('MICBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
+    <input type="date" id="fromDate" oninput="toggleButton('MICBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
+    <input type="date" id="toDate" oninput="toggleButton('MICBtn', 'principalMic', 'rateMic', 'fromDate', 'toDate')">
 
-            <div class="result" id="micResult"></div>
-        </div>
+    <button id="MICBtn" class="btn-calculate" onclick="calculateMonthlyInterest()" disabled>Calculate</button>
+
+    <div class="result" id="micResult"></div>
+</div>
+
+        
 
         <!-- BMI Calculator -->
         <div id="bmi" class="tab-pane fade">
