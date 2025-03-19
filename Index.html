@@ -47,18 +47,30 @@
         input:focus {
             border-color: #0056b3;
         }
+        .btn-calculate, .btn-danger {
+            width: 48%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
         .btn-calculate {
             background: #007bff;
             color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            transition: background 0.3s, transform 0.2s;
-            font-weight: 600;
-            margin-right: 10px;
         }
         .btn-calculate:hover {
             background: #0056b3;
+            transform: scale(1.05);
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #b02a37;
             transform: scale(1.05);
         }
         .result {
@@ -112,44 +124,55 @@
                     html = `
                         <h4>Age Calculator</h4>
                         <input type="date" id="dob">
-                        <button class="btn-calculate" onclick="calculateAge()">Calculate</button>
-                        <button class="btn btn-danger" onclick="restartCalculator()">Restart Test</button>
+                        ${generateButtons('calculateAge()')}
                         <div id="ageResult" class="result"></div>`;
                     break;
 
                 case 'bmi':
                     html = `
                         <h4>BMI Calculator</h4>
-                        <input type="number" id="bmiWeight" placeholder="Weight (kg)">
-                        <input type="number" id="bmiHeight" placeholder="Height (m)">
-                        <button class="btn-calculate" onclick="calculateBMI()">Calculate</button>
-                        <button class="btn btn-danger" onclick="restartCalculator()">Restart Test</button>
+                        <input type="number" id="bmiWeight" placeholder="Weight (kg)" min="1">
+                        <input type="number" id="bmiHeight" placeholder="Height (m)" step="0.01" min="0.1">
+                        ${generateButtons('calculateBMI()')}
                         <div id="bmiResult" class="result"></div>`;
+                    break;
+
+                case 'ibm':
+                    html = `
+                        <h4>IBM Calculator</h4>
+                        <input type="number" id="ibmValue" placeholder="Enter IBM Value" min="0">
+                        ${generateButtons('calculateIBM()')}
+                        <div id="ibmResult" class="result"></div>`;
                     break;
 
                 case 'interest':
                     html = `
                         <h4>Interest Calculator</h4>
-                        <input type="number" id="principal" placeholder="Principal Amount">
-                        <input type="number" id="rate" placeholder="Rate of Interest (%)">
-                        <input type="number" id="time" placeholder="Time (Years)">
-                        <button class="btn-calculate" onclick="calculateInterest()">Calculate</button>
-                        <button class="btn btn-danger" onclick="restartCalculator()">Restart Test</button>
+                        <input type="number" id="principal" placeholder="Principal Amount" min="0">
+                        <input type="number" id="rate" placeholder="Rate of Interest (%)" step="0.01" min="0">
+                        <input type="number" id="time" placeholder="Time (Years)" min="0">
+                        ${generateButtons('calculateInterest()')}
                         <div id="interestResult" class="result"></div>`;
                     break;
 
                 case 'monthlyInterest':
                     html = `
                         <h4>Monthly Interest Calculator</h4>
-                        <input type="number" id="monthlyPrincipal" placeholder="Principal Amount">
-                        <input type="number" id="monthlyRate" placeholder="Monthly Interest Rate (%)">
-                        <button class="btn-calculate" onclick="calculateMonthlyInterest()">Calculate</button>
-                        <button class="btn btn-danger" onclick="restartCalculator()">Restart Test</button>
+                        <input type="number" id="monthlyPrincipal" placeholder="Principal Amount" min="0">
+                        <input type="number" id="monthlyRate" placeholder="Monthly Interest Rate (%)" step="0.01" min="0">
+                        ${generateButtons('calculateMonthlyInterest()')}
                         <div id="monthlyInterestResult" class="result"></div>`;
                     break;
             }
 
             calculators.innerHTML = html;
+        }
+
+        function generateButtons(calculationFunction) {
+            return `
+                <button class="btn-calculate" onclick="${calculationFunction}">Calculate</button>
+                <button class="btn-danger" onclick="restartCalculator()">Restart Test</button>
+            `;
         }
 
         function restartCalculator() {
@@ -158,6 +181,7 @@
 
         function calculateAge() {
             const dob = new Date(document.getElementById("dob").value);
+            if (!dob) return alert("Please enter a valid date.");
             const today = new Date();
             const age = today.getFullYear() - dob.getFullYear();
             document.getElementById("ageResult").innerText = `You are ${age} years old.`;
@@ -166,26 +190,33 @@
         function calculateBMI() {
             const weight = parseFloat(document.getElementById("bmiWeight").value);
             const height = parseFloat(document.getElementById("bmiHeight").value);
-            const bmi = weight / (height * height);
-            document.getElementById("bmiResult").innerText = `Your BMI is ${bmi.toFixed(2)}.`;
+            if (weight && height) {
+                const bmi = weight / (height * height);
+                document.getElementById("bmiResult").innerText = `Your BMI is ${bmi.toFixed(2)}.`;
+            } else alert("Please enter valid inputs.");
+        }
+
+        function calculateIBM() {
+            const ibmValue = parseFloat(document.getElementById("ibmValue").value);
+            if (!isNaN(ibmValue)) {
+                document.getElementById("ibmResult").innerText = `IBM Value: ${ibmValue.toFixed(2)}`;
+            } else alert("Please enter a valid IBM value.");
         }
 
         function calculateInterest() {
-            const principal = parseFloat(document.getElementById("principal").value);
-            const rate = parseFloat(document.getElementById("rate").value);
-            const time = parseFloat(document.getElementById("time").value);
-            const interest = (principal * rate * time) / 100;
-            document.getElementById("interestResult").innerText = `Interest: ${interest.toFixed(2)}.`;
+            const p = parseFloat(document.getElementById("principal").value);
+            const r = parseFloat(document.getElementById("rate").value);
+            const t = parseFloat(document.getElementById("time").value);
+            if (p && r && t) {
+                const interest = (p * r * t) / 100;
+                document.getElementById("interestResult").innerText = `Interest: ${interest.toFixed(2)}.`;
+            } else alert("Please enter valid inputs.");
         }
 
         function calculateMonthlyInterest() {
-            const principal = parseFloat(document.getElementById("monthlyPrincipal").value);
-            const rate = parseFloat(document.getElementById("monthlyRate").value);
-            const interest = (principal * rate) / 100;
-            document.getElementById("monthlyInterestResult").innerText = `Monthly Interest: ${interest.toFixed(2)}.`;
+            calculateInterest();
         }
 
-        // Initialize with Age Calculator
         window.onload = showCalculator;
     </script>
 
